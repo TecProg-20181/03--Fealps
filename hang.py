@@ -18,11 +18,16 @@ def loadWords():
     except IOError:
        print "Error: File does not appear to exist. Exiting program"
        quit()
-    inFile = open(WORDLIST_FILENAME, 'read', 0)
     # line: string
     line = inFile.readline()
     # wordlist: list of strings
     wordlist = string.split(line)
+    try:
+        r = random.choice(wordlist)
+    except:
+        print "Invalid file, could not load words, check", WORDLIST_FILENAME,"and try again"
+        print'exiting program'
+        quit()
     print "  ", len(wordlist), "words loaded."
     print
     print
@@ -36,7 +41,7 @@ def loadWords():
     print
     print
     print
-    return random.choice(wordlist)
+    return r
 
 #check if the word was guessed
 def isWordGuessed(secretWord, letters_guessed):
@@ -64,9 +69,7 @@ def count_letters(secretWord):
 
 # This function validates if the word has different letters have the same size as the attempts, and if its not empty.
 def validated_word (secretWord, guesses):
-
     validated_word = False
-
     while not validated_word:
         unique_letters = count_letters(secretWord)
         if len(secretWord) < 0:
@@ -83,11 +86,12 @@ def validated_word (secretWord, guesses):
 MAXIMUM_TRIES = 20
 TRIES = 0
 def reloadWords():
+    print 'Invalid word loaded, trying again...'
     secretWord = loadWords()
     TRIES += 1
     if TRIES >= MAXIMUM_TRIES:
         print'Reached maximum amount of tries, exiting program'
-        return None
+        quit()
     else:
         return secretWord
 
